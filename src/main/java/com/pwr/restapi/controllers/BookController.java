@@ -40,6 +40,12 @@ public class BookController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping(path = "/{bookId}")
+    public ResponseEntity<Book> getBookById(@PathVariable("bookId") Long bookId) {
+        Book book = bookService.getBookById(bookId);
+        return ResponseEntity.ok(book);
+    }
+
     @DeleteMapping(path = "/{bookId}")
     public ResponseEntity<String> deleteBook(@PathVariable("bookId") Long bookId) {
         String result = bookService.deleteBook(bookId);

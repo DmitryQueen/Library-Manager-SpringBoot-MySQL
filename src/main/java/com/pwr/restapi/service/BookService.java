@@ -56,6 +56,12 @@ public class BookService {
         return "Book with id " + bookId + " was succesfully updated";
     }
 
+
+    public Book getBookById(Long bookId) {
+        Book existingBook = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book with id = " + bookId + " was not found"));
+        return existingBook;
+    }
+
     public String deleteBook(Long bookId) {
 
         if (bookRepository.findById(bookId).isEmpty()) {

@@ -95,6 +95,10 @@ public class StudentService {
         return "Book with id = " + bookId + " was added to student with id = "  + studentId;
     }
 
+    public Student getStudentById(Long studentId) {
+        Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with id = " + studentId + " was not found"));
+        return existingStudent;
+    }
 
     @Transactional
     public String deleteBookFromStudent(Long studentId, Long bookId) {

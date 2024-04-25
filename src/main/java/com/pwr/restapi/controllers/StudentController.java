@@ -44,6 +44,12 @@ public class StudentController {
             return ResponseEntity.ok(result);
     }
 
+    @GetMapping(path = "/{studentId}")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long studentId) {
+        Student student = studentService.getStudentById(studentId);
+        return ResponseEntity.ok(student);
+    }
+
     @PostMapping(path = "/{studentId}/books/{bookId}")
     public ResponseEntity<String> addBookToStudent(@PathVariable Long studentId, @PathVariable Long bookId) {
         String result = studentService.addBookToStudent(studentId, bookId);
