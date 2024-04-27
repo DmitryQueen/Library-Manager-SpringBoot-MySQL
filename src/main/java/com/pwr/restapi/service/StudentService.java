@@ -64,12 +64,14 @@ public class StudentService {
         }
 
         String email = newStudentInfo.getEmail();
-        Optional<Student> student = studentRepository.findStudentByEmail(email);
-        if (email != null && email.length() > 0 && !Objects.equals(email, existingStudent.getEmail()) && student.isEmpty()) {
-            existingStudent.setEmail(email);
-        }
-        else {
-            throw new StudentIsPresentException("Student with email = " + email + " is already exists");
+        if (email != null && email.length() > 0 && !Objects.equals(email, existingStudent.getEmail())) {
+            Optional<Student> student = studentRepository.findStudentByEmail(email);
+            if (student.isEmpty()) {
+                existingStudent.setEmail(email);
+            }
+            else {
+                throw new StudentIsPresentException("Student with email = " + email + " is already exists");
+            }
         }
 
         return "Student with id " + studentId + " was succesfully updated";
