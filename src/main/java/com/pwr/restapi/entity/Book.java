@@ -17,6 +17,9 @@ public class Book {
     @Column(name = "author")
     private String author;
 
+    @Column(name = "is_booked")
+    private boolean isBooked = false;
+
     public Book() {
     }
 
@@ -47,6 +50,14 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
     }
 
     @Override

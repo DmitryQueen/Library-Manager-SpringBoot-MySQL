@@ -104,10 +104,12 @@ public class Student {
         if (books.contains(book)) {
             return;
         }
+        book.setBooked(true);
         books.add(book);
     }
 
     public void deleteBook(Book book) {
+        book.setBooked(false);
         books.remove(book);
     }
 

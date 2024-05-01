@@ -26,4 +26,12 @@ public class StudentExceptionController {
         return new ResponseEntity<>(studentException, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(value = {StudentBookNotFoundException.class})
+    public ResponseEntity<Object> handleStudentBookNotFoundException(StudentBookNotFoundException studentBookNotFoundException) {
+
+        StudentException studentException = new StudentException(studentBookNotFoundException.getMessage(), studentBookNotFoundException.getCause(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(studentException, HttpStatus.NOT_FOUND);
+    }
+
+
 }

@@ -3,9 +3,7 @@ package com.pwr.restapi.service;
 
 import com.pwr.restapi.entity.Book;
 import com.pwr.restapi.entity.Student;
-import com.pwr.restapi.exception.BookNotFoundException;
-import com.pwr.restapi.exception.StudentIsPresentException;
-import com.pwr.restapi.exception.StudentNotFoundException;
+import com.pwr.restapi.exception.*;
 import com.pwr.restapi.repository.BookRepository;
 import com.pwr.restapi.repository.StudentRepository;
 import jakarta.transaction.Transactional;
@@ -92,7 +90,12 @@ public class StudentService {
         Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with id = " + studentId + " was not found"));
         Book existingBook = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book with id = " + bookId + " was not found"));
 
+        if (existingBook.isBooked()) {
+            throw new BookIsBookedException("Book with id = " + bookId + " is booked ");
+        }
+
         existingStudent.addBook(existingBook);
+        existingBook.setBooked(true);
 
         return "Book with id = " + bookId + " was added to student with id = "  + studentId;
     }
@@ -106,6 +109,9 @@ public class StudentService {
     public String deleteBookFromStudent(Long studentId, Long bookId) {
         Student existingStudent = studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with id = " + studentId + " was not found"));
         Book existingBook = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book with id = " + bookId + " was not found"));
+        if (!existingStudent.getBooks().contains(existingBook)) {
+            throw new StudentBookNotFoundException("Student with id = " + studentId + " don't have the book with id = " + bookId);
+        }
 
         existingStudent.deleteBook(existingBook);
 
