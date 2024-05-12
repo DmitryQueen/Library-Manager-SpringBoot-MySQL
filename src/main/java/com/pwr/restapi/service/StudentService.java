@@ -75,11 +75,23 @@ public class StudentService {
         return "Student with id " + studentId + " was succesfully updated";
     }
 
+
+    @Transactional
     public String deleteStudent(Long studentId) {
 
-        if (studentRepository.findById(studentId).isEmpty()) {
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
+
+        if (studentOpt.isEmpty()) {
             throw new StudentNotFoundException("Student with id = " + studentId + " was not found");
         }
+
+        Student student = studentOpt.get();
+
+        for (Book book : student.getBooks()) {
+            book.setStudent(null);
+            book.setBooked(false);
+        }
+
         studentRepository.deleteById(studentId);
         return "Student with id = " + studentId + " was succesfully deleted";
     }
@@ -95,7 +107,6 @@ public class StudentService {
         }
 
         existingStudent.addBook(existingBook);
-        existingBook.setBooked(true);
 
         return "Book with id = " + bookId + " was added to student with id = "  + studentId;
     }

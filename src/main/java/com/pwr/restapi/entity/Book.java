@@ -1,6 +1,7 @@
 package com.pwr.restapi.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +20,12 @@ public class Book {
 
     @Column(name = "is_booked")
     private boolean isBooked = false;
+
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    @JsonBackReference
+    private Student student;
 
     public Book() {
     }
@@ -59,6 +66,15 @@ public class Book {
     public void setBooked(boolean booked) {
         isBooked = booked;
     }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
 
     @Override
     public String toString() {

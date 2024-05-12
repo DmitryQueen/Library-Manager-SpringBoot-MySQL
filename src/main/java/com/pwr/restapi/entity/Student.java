@@ -1,6 +1,7 @@
 package com.pwr.restapi.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class Student {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id")
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "student")
+    @JsonManagedReference
     private List<Book> books;
 
 
@@ -104,13 +105,15 @@ public class Student {
         if (books.contains(book)) {
             return;
         }
-        book.setBooked(true);
         books.add(book);
+
+        book.setStudent(this);
+        book.setBooked(true);
     }
 
     public void deleteBook(Book book) {
-        book.setBooked(false);
         books.remove(book);
+        book.setBooked(false);
     }
 
     @Override
